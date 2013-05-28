@@ -45,7 +45,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	// Fields
 	// ===========================================================
 	
-	private Cocos2dxGLSurfaceView mGLSurfaceView;
+	protected Cocos2dxGLSurfaceView mGLSurfaceView;
 	private Cocos2dxHandler mHandler;
 	private static Context sContext = null;
 	
@@ -64,7 +64,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     	this.mHandler = new Cocos2dxHandler(this);
 
     	this.init();
-
+    
 		Cocos2dxHelper.init(this, this);
 	}
 
@@ -145,18 +145,22 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         if (isAndroidEmulator())
            this.mGLSurfaceView.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
 
-        this.mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
-        this.mGLSurfaceView.setCocos2dxEditText(edittext);
+        mGLSurfaceView.setCocos2dxRenderer(onCreateRenderer());
+        mGLSurfaceView.setCocos2dxEditText(edittext);
 
         // Set framelayout as the content view
 		setContentView(framelayout);
+	}
+
+	protected Cocos2dxRenderer onCreateRenderer() {
+		return new Cocos2dxRenderer();
 	}
 	
     public Cocos2dxGLSurfaceView onCreateView() {
     	return new Cocos2dxGLSurfaceView(this);
     }
 
-   private final static boolean isAndroidEmulator() {
+   public final static boolean isAndroidEmulator() {
       String model = Build.MODEL;
       Log.d(TAG, "model=" + model);
       String product = Build.PRODUCT;
