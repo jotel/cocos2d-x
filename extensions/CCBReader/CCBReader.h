@@ -163,7 +163,6 @@ class CCNodeLoaderListener;
 class CCBMemberVariableAssigner;
 class CCBSelectorResolver;
 class CCBAnimationManager;
-class CCData;
 class CCBKeyframe;
 
 /**

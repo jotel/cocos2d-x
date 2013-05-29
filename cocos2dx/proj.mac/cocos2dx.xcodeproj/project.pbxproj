@@ -281,6 +281,8 @@
 		37EEEC06175DDF83003C1193 /* CCComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 37EEEC02175DDF83003C1193 /* CCComponent.h */; };
 		37EEEC07175DDF83003C1193 /* CCComponentContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37EEEC03175DDF83003C1193 /* CCComponentContainer.cpp */; };
 		37EEEC08175DDF83003C1193 /* CCComponentContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37EEEC04175DDF83003C1193 /* CCComponentContainer.h */; };
+		36B713CB17557CF000A2554C /* CCData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B713C917557CF000A2554C /* CCData.cpp */; };
+		36B713CC17557CF000A2554C /* CCData.h in Headers */ = {isa = PBXBuildFile; fileRef = 36B713CA17557CF000A2554C /* CCData.h */; };
 		41BC70B915BF7EA2006A0A6C /* CCThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70B815BF7EA2006A0A6C /* CCThread.mm */; };
 		41CD6C3515BF7382005E6F29 /* CCAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = 41CD6C2215BF7382005E6F29 /* CCAccelerometer.h */; };
 		41CD6C3615BF7382005E6F29 /* CCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 41CD6C2315BF7382005E6F29 /* CCApplication.h */; };
@@ -588,6 +590,8 @@
 		37EEEC02175DDF83003C1193 /* CCComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCComponent.h; sourceTree = "<group>"; };
 		37EEEC03175DDF83003C1193 /* CCComponentContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCComponentContainer.cpp; sourceTree = "<group>"; };
 		37EEEC04175DDF83003C1193 /* CCComponentContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCComponentContainer.h; sourceTree = "<group>"; };
+		36B713C917557CF000A2554C /* CCData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCData.cpp; sourceTree = "<group>"; };
+		36B713CA17557CF000A2554C /* CCData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCData.h; sourceTree = "<group>"; };
 		41BC70B815BF7EA2006A0A6C /* CCThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCThread.mm; sourceTree = "<group>"; };
 		41CD6C2215BF7382005E6F29 /* CCAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAccelerometer.h; sourceTree = "<group>"; };
 		41CD6C2315BF7382005E6F29 /* CCApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCApplication.h; sourceTree = "<group>"; };
@@ -781,6 +785,8 @@
 				1551A392158F2ADE00E66CFE /* CCString.h */,
 				1551A393158F2ADE00E66CFE /* CCZone.cpp */,
 				1551A394158F2ADE00E66CFE /* CCZone.h */,
+				36B713C917557CF000A2554C /* CCData.cpp */,
+				36B713CA17557CF000A2554C /* CCData.h */,
 			);
 			path = cocoa;
 			sourceTree = "<group>";
@@ -1444,6 +1450,7 @@
 				464EA09817533CDD004C192B /* CCTextureETC.h in Headers */,
 				37EEEC06175DDF83003C1193 /* CCComponent.h in Headers */,
 				37EEEC08175DDF83003C1193 /* CCComponentContainer.h in Headers */,
+				36B713CC17557CF000A2554C /* CCData.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1627,6 +1634,7 @@
 				464EA09717533CDD004C192B /* CCTextureETC.cpp in Sources */,
 				37EEEC05175DDF83003C1193 /* CCComponent.cpp in Sources */,
 				37EEEC07175DDF83003C1193 /* CCComponentContainer.cpp in Sources */,
+				36B713CB17557CF000A2554C /* CCData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -153,6 +153,7 @@ xcopy /Y /Q "$(ProjectDir)..\platform\third_party\win32\libraries\*.*" "$(OutDir
     <ClCompile Include="..\cocoa\CCSet.cpp" />
     <ClCompile Include="..\cocoa\CCString.cpp" />
     <ClCompile Include="..\cocoa\CCZone.cpp" />
+    <ClCompile Include="..\cocoa\CCData.cpp" />
     <ClCompile Include="..\draw_nodes\CCDrawingPrimitives.cpp" />
     <ClCompile Include="..\draw_nodes\CCDrawNode.cpp" />
     <ClCompile Include="..\effects\CCGrabber.cpp" />
@@ -286,6 +287,7 @@ xcopy /Y /Q "$(ProjectDir)..\platform\third_party\win32\libraries\*.*" "$(OutDir
     <ClInclude Include="..\cocoa\CCSet.h" />
     <ClInclude Include="..\cocoa\CCString.h" />
     <ClInclude Include="..\cocoa\CCZone.h" />
+    <ClInclude Include="..\cocoa\CCData.h" />
     <ClInclude Include="..\draw_nodes\CCDrawingPrimitives.h" />
     <ClInclude Include="..\draw_nodes\CCDrawNode.h" />
     <ClInclude Include="..\effects\CCGrabber.h" />
