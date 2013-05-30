@@ -131,6 +131,12 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+    NSArray * prefferedLocalizations = [[NSBundle mainBundle] preferredLocalizations];
+    
+    return CCString::create([[prefferedLocalizations objectAtIndex: 0] UTF8String]);
+}
+
 void CCApplication::setResourceRootPath(const std::string& rootResDir)
 {
     m_resourceRootPath = rootResDir;

@@ -163,10 +163,20 @@ ccLanguageType CCApplication::getCurrentLanguage()
         ret_language = kLanguageArabic;
     }
 
+    return ret_language;
+}
+
+CCString* CCApplication::getPreferredLocalization() {
+	char *language, *country;
+
+	locale_get(&language, &country);
+
+	std:string languageCode = std::string(language);
+
 	free(language);
 	free(country);
 
-    return ret_language;
+	return languageCode;
 }
 
 NS_CC_END;

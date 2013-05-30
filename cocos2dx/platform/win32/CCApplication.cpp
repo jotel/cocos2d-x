@@ -156,6 +156,12 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+std::string CCApplication::getCurrentLanguageCode() {
+	WCHAR localName[LOCALE_NAME_MAX_LENGTH];
+
+	GetUserDefaultLocaleName(lpLocaleName, LOCALE_NAME_MAX_LENGTH);
+}
+
 TargetPlatform CCApplication::getTargetPlatform()
 {
     return kTargetWindows;

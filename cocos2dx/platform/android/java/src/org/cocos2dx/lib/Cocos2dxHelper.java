@@ -106,6 +106,22 @@ public class Cocos2dxHelper {
 		return Locale.getDefault().getLanguage();
 	}
 	
+	public static String getPreferredLocalization() {
+		String result = Locale.getDefault().getLanguage();
+				
+		if ("zh".equals(result)) {			
+			String country = Locale.getDefault().getCountry();
+			
+			if ("CN".equals(country)) {
+				result += "-Hans";
+			} else if ("TW".equals(country)) {
+				result += "-Hant";				
+			}
+		}
+		
+		return result;
+	}
+	
 	public static String getDeviceModel(){
 		return Build.MODEL;
     }

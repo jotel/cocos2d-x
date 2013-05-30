@@ -37,6 +37,9 @@ public:
 	*/
 	virtual ccLanguageType getCurrentLanguage();
 
+    /* override functions */;M
+    virtual CCString* getPreferredLocalization();
+
     /**
      @brief Get target platform
      */

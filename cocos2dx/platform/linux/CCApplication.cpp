@@ -111,7 +111,7 @@ ccLanguageType CCApplication::getCurrentLanguage()
 	{
 		return kLanguageEnglish;
 	}
-	
+
 	if (0 == strcmp("zh", pLanguageName))
 	{
 		ret = kLanguageChinese;
@@ -161,6 +161,21 @@ ccLanguageType CCApplication::getCurrentLanguage()
 		ret = kLanguageArabic;
 	}
 	
+	return ret;
+}
+
+CCString* CCApplication::getPreferredLocalization() {
+	std::string ret("en");
+
+	char *pLanguageName = getenv("LANG");
+
+	if (pLanguageName) {
+		strtok(pLanguageName, "_");
+		if (pLanguageName) {
+			ret = std::string(pLanguageName);
+		}
+	}
+
 	return ret;
 }
 

@@ -201,6 +201,9 @@ ccLanguageType CCApplication::getCurrentLanguage()
 	return currentLanguage;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+  return NULL;
+}
 TargetPlatform CCApplication::getTargetPlatform()	// MH: Cocos2dx 2.0.3 added this new method to the protocol
 {
 	int os = s3eDeviceGetInt(S3E_DEVICE_OS);

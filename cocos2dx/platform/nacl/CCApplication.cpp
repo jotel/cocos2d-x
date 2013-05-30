@@ -107,4 +107,8 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+    return NULL;
+}
+
 NS_CC_END

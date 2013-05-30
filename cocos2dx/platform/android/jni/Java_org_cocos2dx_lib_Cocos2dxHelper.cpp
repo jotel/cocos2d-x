@@ -153,6 +153,20 @@ std::string getCurrentLanguageJNI() {
     return ret;
 }
 
+std::string getPreferredLocalizationJNI() {
+    JniMethodInfo t;
+    std::string ret("");
+
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getPreferredLocalization", "()Ljava/lang/String;")) {
+        jstring str = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+        ret = JniHelper::jstring2string(str);
+        t.env->DeleteLocalRef(str);
+    }
+
+    return ret;
+}
+
 void enableAccelerometerJNI() {
     JniMethodInfo t;
 
