@@ -119,6 +119,12 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+	std::string temp = getPreferredLocalizationJNI();
+
+	return CCString::create(temp.c_str());
+}
+
 TargetPlatform CCApplication::getTargetPlatform()
 {
     return kTargetAndroid;

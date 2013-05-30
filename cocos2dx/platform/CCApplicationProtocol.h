@@ -1,6 +1,8 @@
 #ifndef __CC_APPLICATION_PROTOCOL_H__
 #define __CC_APPLICATION_PROTOCOL_H__
 
+#include "cocoa/CCString.h"
+
 NS_CC_BEGIN
 
 enum TargetPlatform
@@ -59,6 +61,12 @@ public:
     */
     virtual ccLanguageType getCurrentLanguage() = 0;
     
+    /**
+     @brief Returns a string indicating the actual localization contained in the application.
+     @return language id or NULL if not known
+     */
+    virtual CCString* getPreferredLocalization() = 0;
+
     /**
      @brief Get target platform
      */

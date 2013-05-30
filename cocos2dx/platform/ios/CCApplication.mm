@@ -123,6 +123,12 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+    NSArray * prefferedLocalizations = [[NSBundle mainBundle] preferredLocalizations];
+    
+    return CCString::create([[prefferedLocalizations objectAtIndex: 0] UTF8String]);
+}
+
 TargetPlatform CCApplication::getTargetPlatform()
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) // idiom for iOS <= 3.2, otherwise: [UIDevice userInterfaceIdiom] is faster.

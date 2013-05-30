@@ -41,6 +41,9 @@ public:
 	/* override functions */
 	virtual ccLanguageType getCurrentLanguage();
 
+    /* override functions */
+    virtual CCString* getPreferredLocalization();
+
 	/**
      *  Sets the Resource root path.
      *  @deprecated Please use CCFileUtils::sharedFileUtils()->setSearchPaths() instead.
