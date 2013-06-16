@@ -65,31 +65,7 @@ void FileUtilsTestScene::runThisTest()
 
 void FileUtilsDemo::onEnter()
 {
-    CCLayer::onEnter();
-    
-    CCLabelTTF* label = CCLabelTTF::create(title().c_str(), "Arial", 32);
-    addChild(label);
-    label->setPosition(ccp(VisibleRect::center().x, VisibleRect::top().y-50));
-    
-    std::string subTitle = subtitle();
-    if(! subTitle.empty())
-    {
-        CCLabelTTF* l = CCLabelTTF::create(subTitle.c_str(), "Thonburi", 16);
-        addChild(l, 1);
-        l->setPosition(ccp(VisibleRect::center().x, VisibleRect::top().y-80));
-    }
-    
-    CCMenuItemImage *item1 = CCMenuItemImage::create("Images/b1.png", "Images/b2.png", this, menu_selector(FileUtilsDemo::backCallback));
-    CCMenuItemImage *item2 = CCMenuItemImage::create("Images/r1.png","Images/r2.png", this, menu_selector(FileUtilsDemo::restartCallback) );
-    CCMenuItemImage *item3 = CCMenuItemImage::create("Images/f1.png", "Images/f2.png", this, menu_selector(FileUtilsDemo::nextCallback) );
-    
-    CCMenu *menu = CCMenu::create(item1, item2, item3, NULL);
-    menu->setPosition(CCPointZero);
-    item1->setPosition(ccp(VisibleRect::center().x - item2->getContentSize().width*2, VisibleRect::bottom().y+item2->getContentSize().height/2));
-    item2->setPosition(ccp(VisibleRect::center().x, VisibleRect::bottom().y+item2->getContentSize().height/2));
-    item3->setPosition(ccp(VisibleRect::center().x + item2->getContentSize().width*2, VisibleRect::bottom().y+item2->getContentSize().height/2));
-    
-    addChild(menu, 1);
+    BaseTest::onEnter();    
 }
 
 void FileUtilsDemo::backCallback(CCObject* pSender)
@@ -204,9 +180,11 @@ void TestSearchPath::onEnter()
     FILE* fp = fopen(fileName.c_str(), "wb");
     if (fp)
     {
-        fwrite(szBuf, 1, strlen(szBuf), fp);
+        size_t ret = fwrite(szBuf, 1, strlen(szBuf), fp);
+        CCAssert(ret == 0, "fwrite function returned nonzero value");
         fclose(fp);
-        CCLog("Writing file to writable path succeed.");
+        if (ret == 0)
+            CCLog("Writing file to writable path succeed.");
     }
     
     searchPaths.insert(searchPaths.begin(), writablePath);

@@ -23,31 +23,31 @@ HttpClientTest::HttpClientTest()
     
     // Get 
     CCLabelTTF *labelGet = CCLabelTTF::create("Test Get", "Arial", 22);
-    CCMenuItemLabel *itemGet = CCMenuItemLabel::create(labelGet, this, menu_selector(HttpClientTest::onMenuGetTestClicked));
+    CCMenuItemLabel *itemGet = CCMenuItemLabel::create(labelGet, CC_CALLBACK_1(HttpClientTest::onMenuGetTestClicked, this));
     itemGet->setPosition(ccp(winSize.width / 2, winSize.height - MARGIN - SPACE));
     menuRequest->addChild(itemGet);
     
     // Post
     CCLabelTTF *labelPost = CCLabelTTF::create("Test Post", "Arial", 22);
-    CCMenuItemLabel *itemPost = CCMenuItemLabel::create(labelPost, this, menu_selector(HttpClientTest::onMenuPostTestClicked));
+    CCMenuItemLabel *itemPost = CCMenuItemLabel::create(labelPost, CC_CALLBACK_1(HttpClientTest::onMenuPostTestClicked, this));
     itemPost->setPosition(ccp(winSize.width / 2, winSize.height - MARGIN - 2 * SPACE));
     menuRequest->addChild(itemPost);
     
     // Post Binary
     CCLabelTTF *labelPostBinary = CCLabelTTF::create("Test Post Binary", "Arial", 22);
-    CCMenuItemLabel *itemPostBinary = CCMenuItemLabel::create(labelPostBinary, this, menu_selector(HttpClientTest::onMenuPostBinaryTestClicked));
+    CCMenuItemLabel *itemPostBinary = CCMenuItemLabel::create(labelPostBinary, CC_CALLBACK_1(HttpClientTest::onMenuPostBinaryTestClicked, this));
     itemPostBinary->setPosition(ccp(winSize.width / 2, winSize.height - MARGIN - 3 * SPACE));
     menuRequest->addChild(itemPostBinary);
 
     // Put
     CCLabelTTF *labelPut = CCLabelTTF::create("Test Put", "Arial", 22);
-    CCMenuItemLabel *itemPut = CCMenuItemLabel::create(labelPut, this, menu_selector(HttpClientTest::onMenuPutTestClicked));
+    CCMenuItemLabel *itemPut = CCMenuItemLabel::create(labelPut, CC_CALLBACK_1(HttpClientTest::onMenuPutTestClicked, this));
     itemPut->setPosition(ccp(winSize.width / 2, winSize.height - MARGIN - 4 * SPACE));
     menuRequest->addChild(itemPut);
 
     // Delete
     CCLabelTTF *labelDelete = CCLabelTTF::create("Test Delete", "Arial", 22);
-    CCMenuItemLabel *itemDelete = CCMenuItemLabel::create(labelDelete, this, menu_selector(HttpClientTest::onMenuDeleteTestClicked));
+    CCMenuItemLabel *itemDelete = CCMenuItemLabel::create(labelDelete, CC_CALLBACK_1(HttpClientTest::onMenuDeleteTestClicked, this));
     itemDelete->setPosition(ccp(winSize.width / 2, winSize.height - MARGIN - 5 * SPACE));
     menuRequest->addChild(itemDelete);
     
@@ -57,7 +57,7 @@ HttpClientTest::HttpClientTest()
     addChild(m_labelStatusCode);
     
     // Back Menu
-    CCMenuItemFont *itemBack = CCMenuItemFont::create("Back", this, menu_selector(HttpClientTest::toExtensionsMainLayer));
+    CCMenuItemFont *itemBack = CCMenuItemFont::create("Back", CC_CALLBACK_1(HttpClientTest::toExtensionsMainLayer, this));
     itemBack->setPosition(ccp(VisibleRect::rightBottom().x - 50, VisibleRect::rightBottom().y + 25));
     CCMenu *menuBack = CCMenu::create(itemBack, NULL);
     menuBack->setPosition(CCPointZero);
