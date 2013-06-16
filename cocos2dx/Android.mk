@@ -171,6 +171,8 @@ LOCAL_WHOLE_STATIC_LIBRARIES += cocos_libwebp_static
 LOCAL_CFLAGS := -Wno-psabi -DUSE_FILE32API
 LOCAL_EXPORT_CFLAGS := -Wno-psabi -DUSE_FILE32API
 
+LOCAL_CPPFLAGS := -std=c++11
+
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,libjpeg)
