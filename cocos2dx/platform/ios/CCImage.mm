@@ -388,10 +388,14 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
             textOrigingY = startH - shadowStrokePaddingY;
         }
         
+        CGRect rect = CGRectMake(textOriginX, textOrigingY, textWidth, textHeight);
         
+        CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
         // actually draw the text in the context
 		// XXX: ios7 casting
-        [str drawInRect:CGRectMake(textOriginX, textOrigingY, textWidth, textHeight) withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:(NSTextAlignment)align];
+        [str drawInRect: rect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:(NSTextAlignment)align];
+
+        CGContextEndTransparencyLayer(context);
         
         // pop the context
         UIGraphicsPopContext();
