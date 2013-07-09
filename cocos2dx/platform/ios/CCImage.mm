@@ -302,12 +302,10 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
                                                             8,
                                                             (int)(dim.width) * 4,
                                                             colorSpace,
-                                                            kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-        
-        CGColorSpaceRelease(colorSpace);
-        
+                                                            kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);                
         if (!context)
         {
+            CGColorSpaceRelease(colorSpace);
             delete[] data;
             break;
         }
@@ -342,9 +340,15 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
             CGSize offset;
             offset.height = pInfo->shadowOffset.height;
             offset.width  = pInfo->shadowOffset.width;
-            CGContextSetShadow(context, offset, pInfo->shadowBlur);
+            CGFloat shadowColorValues[] = {0, 0, 0, pInfo->shadowOpacity};
+            CGColorRef shadowColor = CGColorCreate (colorSpace, shadowColorValues);
+            
+            CGContextSetShadowWithColor(context, offset, pInfo->shadowBlur, shadowColor);
+            
+            CGColorRelease (shadowColor);
         }
         
+        CGColorSpaceRelease(colorSpace);        
         
         
         // normal fonts
