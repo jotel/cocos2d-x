@@ -438,7 +438,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                     // cache the texture file name
-                    VolatileTexture::addImageTexture(texture, fullpath.c_str(), eImageFormat);
+                    VolatileTexture::addImageTexture(texture, pathKey.c_str(), eImageFormat);
 #endif
                     _textures->setObject(texture, pathKey.c_str());
                     texture->release();
@@ -687,14 +687,9 @@ VolatileTexture::VolatileTexture(CCTexture2D *t)
 , _pixelFormat(kTexture2DPixelFormat_RGBA8888)
 , _fileName("")
 , _fmtImage(CCImage::kFmtPng)
-, _alignment(kCCTextAlignmentCenter)
-, _vAlignment(kCCVerticalTextAlignmentCenter)
-, _fontName("")
 , _text("")
 , uiImage(NULL)
-, _fontSize(0.0f)
 {
-    _size = CCSizeMake(0, 0);
     _texParams.minFilter = GL_LINEAR;
     _texParams.magFilter = GL_LINEAR;
     _texParams.wrapS = GL_CLAMP_TO_EDGE;
@@ -768,8 +763,7 @@ void VolatileTexture::addDataTexture(CCTexture2D *tt, void* data, CCTexture2DPix
     vt->_textureSize = contentSize;
 }
 
-void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const CCSize& dimensions, CCTextAlignment alignment, 
-                                       CCVerticalTextAlignment vAlignment, const char *fontName, float fontSize)
+void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, ccFontDefinition* fontDefinition)
 {
     if (isReloading)
     {
@@ -779,12 +773,8 @@ void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const 
     VolatileTexture *vt = findVolotileTexture(tt);
 
     vt->_cashedImageType = kString;
-    vt->_size        = dimensions;
-    vt->_fontName = fontName;
-    vt->_alignment   = alignment;
-    vt->_vAlignment  = vAlignment;
-    vt->_fontSize   = fontSize;
     vt->_text     = text;
+    vt->_fontDefinition = *fontDefinition;
 }
 
 void VolatileTexture::setTexParameters(CCTexture2D *t, ccTexParams *texParams) 
@@ -858,7 +848,7 @@ void VolatileTexture::reloadAllTextures()
                         vt->texture->initWithImage(pImage);
                         CCTexture2D::setDefaultAlphaPixelFormat(oldPixelFormat);
                     }
-
+                    
                     CC_SAFE_DELETE_ARRAY(pBuffer);
                     CC_SAFE_RELEASE(pImage);
                 }
@@ -875,13 +865,7 @@ void VolatileTexture::reloadAllTextures()
             break;
         case kString:
             {
-                vt->texture->initWithString(vt->_text.c_str(),
-                                            vt->_fontName.c_str(),
-                                            vt->_fontSize,
-                                            vt->_size,
-                                            vt->_alignment,
-                                            vt->_vAlignment
-                                            );
+                vt->texture->initWithString(vt->_text.c_str(), &vt->_fontDefinition);
             }
             break;
         case kImage:
