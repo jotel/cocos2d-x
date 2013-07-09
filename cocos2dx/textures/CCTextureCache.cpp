@@ -714,14 +714,9 @@ VolatileTexture::VolatileTexture(CCTexture2D *t)
 , m_PixelFormat(kTexture2DPixelFormat_RGBA8888)
 , m_strFileName("")
 , m_FmtImage(CCImage::kFmtPng)
-, m_alignment(kCCTextAlignmentCenter)
-, m_vAlignment(kCCVerticalTextAlignmentCenter)
-, m_strFontName("")
 , m_strText("")
 , uiImage(NULL)
-, m_fFontSize(0.0f)
 {
-    m_size = CCSizeMake(0, 0);
     m_texParams.minFilter = GL_LINEAR;
     m_texParams.magFilter = GL_LINEAR;
     m_texParams.wrapS = GL_CLAMP_TO_EDGE;
@@ -795,8 +790,7 @@ void VolatileTexture::addDataTexture(CCTexture2D *tt, void* data, CCTexture2DPix
     vt->m_TextureSize = contentSize;
 }
 
-void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const CCSize& dimensions, CCTextAlignment alignment, 
-                                       CCVerticalTextAlignment vAlignment, const char *fontName, float fontSize)
+void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const FontDefinition& fontDefinition)
 {
     if (isReloading)
     {
@@ -806,12 +800,8 @@ void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const 
     VolatileTexture *vt = findVolotileTexture(tt);
 
     vt->m_eCashedImageType = kString;
-    vt->m_size        = dimensions;
-    vt->m_strFontName = fontName;
-    vt->m_alignment   = alignment;
-    vt->m_vAlignment  = vAlignment;
-    vt->m_fFontSize   = fontSize;
     vt->m_strText     = text;
+    vt->m_fontDefinition = fontDefinition;
 }
 
 void VolatileTexture::setTexParameters(CCTexture2D *t, ccTexParams *texParams) 
@@ -902,13 +892,7 @@ void VolatileTexture::reloadAllTextures()
             break;
         case kString:
             {
-                vt->texture->initWithString(vt->m_strText.c_str(),
-                                            vt->m_strFontName.c_str(),
-                                            vt->m_fFontSize,
-                                            vt->m_size,
-                                            vt->m_alignment,
-                                            vt->m_vAlignment
-                                            );
+                vt->texture->initWithString(vt->m_strText.c_str(), vt->_fontDefinition);
             }
             break;
         case kImage:
