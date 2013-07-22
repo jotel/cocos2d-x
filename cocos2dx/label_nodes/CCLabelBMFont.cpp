@@ -506,10 +506,8 @@ bool CCLabelBMFont::initWithString(const char *theString, const char *fntFile, f
         _width = width;
         _alignment = alignment;
         
-        _displayedOpacity = _realOpacity = 255;
-		_displayedColor = _realColor = ccWHITE;
-        _cascadeOpacityEnabled = true;
-        _cascadeColorEnabled = true;
+        setCascadeOpacityEnabled(true);
+        setCascadeColorEnabled(true);
         
         _contentSize = CCSizeZero;
         
@@ -538,12 +536,6 @@ CCLabelBMFont::CCLabelBMFont()
 , _lineBreakWithoutSpaces(false)
 , _imageOffset(CCPointZero)
 , _reusedChar(NULL)
-, _displayedOpacity(255)
-, _realOpacity(255)
-, _displayedColor(ccWHITE)
-, _realColor(ccWHITE)
-, _cascadeColorEnabled(true)
-, _cascadeOpacityEnabled(true)
 , _isOpacityModifyRGB(false)
 {
 
@@ -680,8 +672,8 @@ void CCLabelBMFont::createFontChars()
 			fontChar->setOpacityModifyRGB(_isOpacityModifyRGB);
             
 			// Color MUST be set before opacity, since opacity might change color if OpacityModifyRGB is on
-			fontChar->updateDisplayedColor(_displayedColor);
-			fontChar->updateDisplayedOpacity(_displayedOpacity);
+			fontChar->updateDisplayedColor(getDisplayedColor());
+			fontChar->updateDisplayedOpacity(getDisplayedOpacity());
         }
 
         // updating previous sprite
@@ -787,58 +779,6 @@ void CCLabelBMFont::setCString(const char *label)
     setString(label);
 }
 
-//LabelBMFont - CCRGBAProtocol protocol
-const ccColor3B& CCLabelBMFont::getColor()
-{
-    return _realColor;
-}
-
-const ccColor3B& CCLabelBMFont::getDisplayedColor()
-{
-    return _displayedColor;
-}
-
-void CCLabelBMFont::setColor(const ccColor3B& color)
-{
-	_displayedColor = _realColor = color;
-	
-	if( _cascadeColorEnabled ) {
-		ccColor3B parentColor = ccWHITE;
-        CCRGBAProtocol* pParent = dynamic_cast<CCRGBAProtocol*>(_parent);
-        if (pParent && pParent->isCascadeColorEnabled())
-        {
-            parentColor = pParent->getDisplayedColor();
-        }
-        this->updateDisplayedColor(parentColor);
-	}
-}
-
-GLubyte CCLabelBMFont::getOpacity(void)
-{
-    return _realOpacity;
-}
-
-GLubyte CCLabelBMFont::getDisplayedOpacity(void)
-{
-    return _displayedOpacity;
-}
-
-/** Override synthesized setOpacity to recurse items */
-void CCLabelBMFont::setOpacity(GLubyte opacity)
-{
-	_displayedOpacity = _realOpacity = opacity;
-    
-	if( _cascadeOpacityEnabled ) {
-		GLubyte parentOpacity = 255;
-        CCRGBAProtocol* pParent = dynamic_cast<CCRGBAProtocol*>(_parent);
-        if (pParent && pParent->isCascadeOpacityEnabled())
-        {
-            parentOpacity = pParent->getDisplayedOpacity();
-        }
-        this->updateDisplayedOpacity(parentOpacity);
-	}
-}
-
 void CCLabelBMFont::setOpacityModifyRGB(bool var)
 {
     _isOpacityModifyRGB = var;
@@ -862,52 +802,6 @@ void CCLabelBMFont::setOpacityModifyRGB(bool var)
 bool CCLabelBMFont::isOpacityModifyRGB()
 {
     return _isOpacityModifyRGB;
-}
-
-void CCLabelBMFont::updateDisplayedOpacity(GLubyte parentOpacity)
-{
-	_displayedOpacity = _realOpacity * parentOpacity/255.0;
-    
-	CCObject* pObj;
-	CCARRAY_FOREACH(_children, pObj)
-    {
-        CCSprite *item = (CCSprite*)pObj;
-		item->updateDisplayedOpacity(_displayedOpacity);
-	}
-}
-
-void CCLabelBMFont::updateDisplayedColor(const ccColor3B& parentColor)
-{
-	_displayedColor.r = _realColor.r * parentColor.r/255.0;
-	_displayedColor.g = _realColor.g * parentColor.g/255.0;
-	_displayedColor.b = _realColor.b * parentColor.b/255.0;
-    
-    CCObject* pObj;
-	CCARRAY_FOREACH(_children, pObj)
-    {
-        CCSprite *item = (CCSprite*)pObj;
-		item->updateDisplayedColor(_displayedColor);
-	}
-}
-
-bool CCLabelBMFont::isCascadeColorEnabled()
-{
-    return false;
-}
-
-void CCLabelBMFont::setCascadeColorEnabled(bool cascadeColorEnabled)
-{
-    _cascadeColorEnabled = cascadeColorEnabled;
-}
-
-bool CCLabelBMFont::isCascadeOpacityEnabled()
-{
-    return false;
-}
-
-void CCLabelBMFont::setCascadeOpacityEnabled(bool cascadeOpacityEnabled)
-{
-    _cascadeOpacityEnabled = cascadeOpacityEnabled;
 }
 
 // LabelBMFont - AnchorPoint
