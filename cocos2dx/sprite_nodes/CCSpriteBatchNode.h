@@ -60,7 +60,7 @@ class CCSprite;
 * 
 * @since v0.7.1
 */
-class CC_DLL CCSpriteBatchNode : public CCNode, public CCTextureProtocol
+class CC_DLL CCSpriteBatchNode : public CCNodeRGBA, public CCTextureProtocol
 {
 public:
     /**

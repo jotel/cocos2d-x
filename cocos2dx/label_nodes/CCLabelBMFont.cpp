@@ -506,10 +506,8 @@ bool CCLabelBMFont::initWithString(const char *theString, const char *fntFile, f
         m_fWidth = width;
         m_pAlignment = alignment;
         
-        m_cDisplayedOpacity = m_cRealOpacity = 255;
-		m_tDisplayedColor = m_tRealColor = ccWHITE;
-        m_bCascadeOpacityEnabled = true;
-        m_bCascadeColorEnabled = true;
+        setCascadeOpacityEnabled(true);
+        setCascadeColorEnabled(true);
         
         m_obContentSize = CCSizeZero;
         
@@ -530,6 +528,7 @@ bool CCLabelBMFont::initWithString(const char *theString, const char *fntFile, f
 }
 
 CCLabelBMFont::CCLabelBMFont()
+<<<<<<< HEAD
 : m_sString(NULL)
 , m_sInitialString(NULL)
 , m_pAlignment(kCCTextAlignmentCenter)
@@ -545,6 +544,17 @@ CCLabelBMFont::CCLabelBMFont()
 , m_bCascadeColorEnabled(true)
 , m_bCascadeOpacityEnabled(true)
 , m_bIsOpacityModifyRGB(false)
+=======
+: _string(NULL)
+, _initialString(NULL)
+, _alignment(kCCTextAlignmentCenter)
+, _width(-1.0f)
+, _configuration(NULL)
+, _lineBreakWithoutSpaces(false)
+, _imageOffset(CCPointZero)
+, _reusedChar(NULL)
+, _isOpacityModifyRGB(false)
+>>>>>>> 9f5bdcc... CCSpriteBatchNode now inherits from CCNodeRGBA allowing to set opacity and colour. This would fix settings opacity of CCScale9Sprite.
 {
 
 }
@@ -680,8 +690,13 @@ void CCLabelBMFont::createFontChars()
 			fontChar->setOpacityModifyRGB(m_bIsOpacityModifyRGB);
             
 			// Color MUST be set before opacity, since opacity might change color if OpacityModifyRGB is on
+<<<<<<< HEAD
 			fontChar->updateDisplayedColor(m_tDisplayedColor);
 			fontChar->updateDisplayedOpacity(m_cDisplayedOpacity);
+=======
+			fontChar->updateDisplayedColor(getDisplayedColor());
+			fontChar->updateDisplayedOpacity(getDisplayedOpacity());
+>>>>>>> 9f5bdcc... CCSpriteBatchNode now inherits from CCNodeRGBA allowing to set opacity and colour. This would fix settings opacity of CCScale9Sprite.
         }
 
         // updating previous sprite
@@ -787,6 +802,7 @@ void CCLabelBMFont::setCString(const char *label)
     setString(label);
 }
 
+<<<<<<< HEAD
 //LabelBMFont - CCRGBAProtocol protocol
 const ccColor3B& CCLabelBMFont::getColor()
 {
@@ -839,6 +855,8 @@ void CCLabelBMFont::setOpacity(GLubyte opacity)
 	}
 }
 
+=======
+>>>>>>> 9f5bdcc... CCSpriteBatchNode now inherits from CCNodeRGBA allowing to set opacity and colour. This would fix settings opacity of CCScale9Sprite.
 void CCLabelBMFont::setOpacityModifyRGB(bool var)
 {
     m_bIsOpacityModifyRGB = var;
@@ -864,6 +882,7 @@ bool CCLabelBMFont::isOpacityModifyRGB()
     return m_bIsOpacityModifyRGB;
 }
 
+<<<<<<< HEAD
 void CCLabelBMFont::updateDisplayedOpacity(GLubyte parentOpacity)
 {
 	m_cDisplayedOpacity = m_cRealOpacity * parentOpacity/255.0;
@@ -910,6 +929,8 @@ void CCLabelBMFont::setCascadeOpacityEnabled(bool cascadeOpacityEnabled)
     m_bCascadeOpacityEnabled = cascadeOpacityEnabled;
 }
 
+=======
+>>>>>>> 9f5bdcc... CCSpriteBatchNode now inherits from CCNodeRGBA allowing to set opacity and colour. This would fix settings opacity of CCScale9Sprite.
 // LabelBMFont - AnchorPoint
 void CCLabelBMFont::setAnchorPoint(const CCPoint& point)
 {

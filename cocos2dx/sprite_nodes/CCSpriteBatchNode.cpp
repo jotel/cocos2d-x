@@ -94,6 +94,8 @@ bool CCSpriteBatchNode::initWithTexture(CCTexture2D *tex, unsigned int capacity)
     m_pobDescendants->initWithCapacity(capacity);
 
     setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
+    setCascadeOpacityEnabled(true);
+    setCascadeColorEnabled(true);
     return true;
 }
 
@@ -176,19 +178,19 @@ void CCSpriteBatchNode::addChild(CCNode *child, int zOrder, int tag)
     // check CCSprite is using the same texture id
     CCAssert(pSprite->getTexture()->getName() == m_pobTextureAtlas->getTexture()->getName(), "CCSprite is not using the same texture id");
 
-    CCNode::addChild(child, zOrder, tag);
+    CCNodeRGBA::addChild(child, zOrder, tag);
 
     appendChild(pSprite);
 }
 
 void CCSpriteBatchNode::addChild(CCNode *child)
 {
-    CCNode::addChild(child);
+    CCNodeRGBA::addChild(child);
 }
 
 void CCSpriteBatchNode::addChild(CCNode *child, int zOrder)
 {
-    CCNode::addChild(child, zOrder);
+    CCNodeRGBA::addChild(child, zOrder);
 }
 
 // override reorderChild
@@ -203,7 +205,7 @@ void CCSpriteBatchNode::reorderChild(CCNode *child, int zOrder)
     }
 
     //set the z-order and sort later
-    CCNode::reorderChild(child, zOrder);
+    CCNodeRGBA::reorderChild(child, zOrder);
 }
 
 // override remove child
@@ -222,7 +224,7 @@ void CCSpriteBatchNode::removeChild(CCNode *child, bool cleanup)
     // cleanup before removing
     removeSpriteFromAtlas(pSprite);
 
-    CCNode::removeChild(pSprite, cleanup);
+    CCNodeRGBA::removeChild(pSprite, cleanup);
 }
 
 void CCSpriteBatchNode::removeChildAtIndex(unsigned int uIndex, bool bDoCleanup)
@@ -236,7 +238,7 @@ void CCSpriteBatchNode::removeAllChildrenWithCleanup(bool bCleanup)
     // useSelfRender should be performed on all descendants. issue #1216
     arrayMakeObjectsPerformSelectorWithObject(m_pobDescendants, setBatchNode, NULL, CCSprite*);
 
-    CCNode::removeAllChildrenWithCleanup(bCleanup);
+    CCNodeRGBA::removeAllChildrenWithCleanup(bCleanup);
 
     m_pobDescendants->removeAllObjects();
     m_pobTextureAtlas->removeAllQuads();
@@ -770,7 +772,7 @@ CCSpriteBatchNode * CCSpriteBatchNode::addSpriteWithoutQuad(CCSprite*child, unsi
     m_pobDescendants->insertObject(child, i);
 
     // IMPORTANT: Call super, and not self. Avoid adding it to the texture atlas array
-    CCNode::addChild(child, z, aTag);
+    CCNodeRGBA::addChild(child, z, aTag);
     //#issue 1262 don't use lazy sorting, tiles are added as quads not as sprites, so sprites need to be added in order
     reorderBatch(false);
 
