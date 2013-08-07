@@ -115,8 +115,8 @@ public class Cocos2dxBitmap {
 		final Paint paint = Cocos2dxBitmap.newPaint(pFontName, pFontSize, horizontalAlignment);
 		
 		// set the paint color
-		paint.setARGB(255, (int)(255.0 * fontTintR), (int)(255.0 * fontTintG), (int)(255.0 * fontTintB));
-
+		paint.setARGB(255, (int)(255 * fontTintR), (int)(255 * fontTintG), (int)(255 * fontTintB));
+		
 		final TextProperty textProperty = Cocos2dxBitmap.computeTextProperty(pString, pWidth, pHeight, paint);
 				
         RectF textRect = new RectF(0, 0, textProperty.mMaxWidth, (pHeight == 0 ? textProperty.mTotalHeight: pHeight));
@@ -166,7 +166,7 @@ public class Cocos2dxBitmap {
 			final Paint paintStroke = Cocos2dxBitmap.newPaint(pFontName, pFontSize, horizontalAlignment);
 			paintStroke.setStyle(Paint.Style.STROKE);
 			paintStroke.setStrokeWidth(strokeSize * 0.5f);
-			paintStroke.setARGB(255, (int)strokeR * 255, (int)strokeG * 255, (int)strokeB * 255);
+			paintStroke.setARGB(255, (int)(strokeR * 255), (int)(strokeG * 255), (int)(strokeB * 255));
 			
 			x = 0;
 			y = Cocos2dxBitmap.computeY(fontMetricsInt, pHeight, textProperty.mTotalHeight, verticalAlignment);
