@@ -303,9 +303,13 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
         // take care of stroke if needed
         if ( pInfo->hasStroke )
         {
-            CGContextSetTextDrawingMode(context, kCGTextFillStroke);
-            CGContextSetRGBStrokeColor(context, pInfo->strokeColorR, pInfo->strokeColorG, pInfo->strokeColorB, 1);
+            CGFloat strokeColorValues[] = {pInfo->strokeColorR, pInfo->strokeColorG, pInfo->strokeColorB, pInfo->shadowOpacity};
+            CGColorRef strokeColor = CGColorCreate (colorSpace, strokeColorValues);
+
+            CGContextSetTextDrawingMode(context, kCGTextStroke);
+            CGContextSetStrokeColorWithColor(context, strokeColor);
             CGContextSetLineWidth(context, pInfo->strokeSize);
+            CGColorRelease (strokeColor);
         }
         
         // take care of shadow if needed
@@ -319,7 +323,6 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
             CGColorRelease (shadowColor);
         }
         
-        CGColorSpaceRelease(colorSpace);        
         
         CGContextBeginTransparencyLayer(context, NULL);
         // actually draw the text in the context
@@ -328,13 +331,15 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
         [str drawInRect: textRect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:(NSTextAlignment)align];
 
         CGContextEndTransparencyLayer(context);
-        
+
         // pop the context
         UIGraphicsPopContext();
-        
+
         // release the context
         CGContextRelease(context);
-               
+
+        CGColorSpaceRelease(colorSpace);
+        
         // output params
         pInfo->data                 = data;
         pInfo->hasAlpha             = true;
