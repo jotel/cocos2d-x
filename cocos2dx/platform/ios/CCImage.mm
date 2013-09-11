@@ -299,19 +299,6 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
                                 : (3 == uHoriFlag) ? UITextAlignmentCenter
                                 : UITextAlignmentLeft);
 
-        
-        // take care of stroke if needed
-        if ( pInfo->hasStroke )
-        {
-            CGFloat strokeColorValues[] = {pInfo->strokeColorR, pInfo->strokeColorG, pInfo->strokeColorB, pInfo->shadowOpacity};
-            CGColorRef strokeColor = CGColorCreate (colorSpace, strokeColorValues);
-
-            CGContextSetTextDrawingMode(context, kCGTextStroke);
-            CGContextSetStrokeColorWithColor(context, strokeColor);
-            CGContextSetLineWidth(context, pInfo->strokeSize);
-            CGColorRelease (strokeColor);
-        }
-        
         // take care of shadow if needed
         if ( pInfo->hasShadow )
         {
@@ -322,14 +309,41 @@ static bool _initWithString(const char * pText, cocos2d::CCImage::ETextAlign eAl
             
             CGColorRelease (shadowColor);
         }
-        
-        
-        CGContextBeginTransparencyLayer(context, NULL);
-        // actually draw the text in the context
-		// XXX: ios7 casting
-        
-        [str drawInRect: textRect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:(NSTextAlignment)align];
 
+        CGContextBeginTransparencyLayer(context, NULL);
+
+        float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        
+        if(systemVersion >= 7.0f && pInfo->hasStroke) {
+            CGFloat s = (pInfo->strokeSize  ) / nSize  * 100.0f;
+            
+            NSMutableDictionary *stringAttributes = [NSMutableDictionary dictionary];
+            
+            [stringAttributes setObject: font forKey: NSFontAttributeName];
+            [stringAttributes setObject: [UIColor colorWithRed:pInfo->tintColorR green: pInfo->tintColorG blue: pInfo->tintColorB alpha: 1.0f] forKey: NSForegroundColorAttributeName];
+            [stringAttributes setObject: [UIColor colorWithRed:pInfo->strokeColorR green: pInfo->strokeColorG blue: pInfo->strokeColorB alpha:1.0f] forKey: NSStrokeColorAttributeName];
+            [stringAttributes setObject: [NSNumber numberWithFloat: -s] forKey: NSStrokeWidthAttributeName];
+
+            [str drawInRect: textRect withAttributes: stringAttributes];
+        } else {
+        
+            // take care of stroke if needed
+            if ( pInfo->hasStroke )
+            {
+                CGFloat strokeColorValues[] = {pInfo->strokeColorR, pInfo->strokeColorG, pInfo->strokeColorB, 1.0f};
+                CGColorRef strokeColor = CGColorCreate (colorSpace, strokeColorValues);
+
+                CGContextSetTextDrawingMode(context, kCGTextFillStroke);
+                CGContextSetStrokeColorWithColor(context, strokeColor);
+                CGContextSetLineWidth(context, pInfo->strokeSize);
+                CGColorRelease (strokeColor);
+            }
+            
+            // actually draw the text in the context
+            
+            [str drawInRect: textRect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:(NSTextAlignment)align];
+        }
+        
         CGContextEndTransparencyLayer(context);
 
         // pop the context
