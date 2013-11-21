@@ -790,7 +790,7 @@ void VolatileTexture::addDataTexture(CCTexture2D *tt, void* data, CCTexture2DPix
     vt->m_TextureSize = contentSize;
 }
 
-void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const FontDefinition& fontDefinition)
+void VolatileTexture::addStringTexture(CCTexture2D *tt, const char* text, const ccFontDefinition& fontDefinition)
 {
     if (isReloading)
     {
@@ -892,7 +892,7 @@ void VolatileTexture::reloadAllTextures()
             break;
         case kString:
             {
-                vt->texture->initWithString(vt->m_strText.c_str(), vt->_fontDefinition);
+                vt->texture->initWithString(vt->m_strText.c_str(), vt->m_fontDefinition);
             }
             break;
         case kImage:

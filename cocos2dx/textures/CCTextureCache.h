@@ -200,7 +200,7 @@ public:
     ~VolatileTexture();
 
     static void addImageTexture(CCTexture2D *tt, const char* imageFileName, CCImage::EImageFormat format);
-    static void addStringTexture(CCTexture2D *tt, const char* text, const FontDefinition& fontDefinition);
+    static void addStringTexture(CCTexture2D *tt, const char* text, const ccFontDefinition& fontDefinition);
     static void addDataTexture(CCTexture2D *tt, void* data, CCTexture2DPixelFormat pixelFormat, const CCSize& contentSize);
     static void addCCImage(CCTexture2D *tt, CCImage *image);
 
@@ -233,7 +233,7 @@ protected:
 
     ccTexParams      m_texParams;
     std::string      m_strText;
-    FontDefinition   m_fontDefinition;
+    ccFontDefinition   m_fontDefinition;
 };
 
 #endif

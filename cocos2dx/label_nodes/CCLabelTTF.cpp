@@ -301,7 +301,7 @@ bool CCLabelTTF::updateTexture()
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     
         ccFontDefinition texDef = _prepareTextDefinition(true);
-        tex->initWithString( m_string.c_str(), &texDef );
+        tex->initWithString( m_string.c_str(), texDef );
     
     #else
     
