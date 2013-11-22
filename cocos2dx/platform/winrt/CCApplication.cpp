@@ -205,6 +205,15 @@ ccLanguageType CCApplication::getCurrentLanguage()
     return ret;
 }
 
+CCString* CCApplication::getPreferredLocalization() {
+    wchar_t localeName[LOCALE_NAME_MAX_LENGTH] = {'e','n'};
+    
+    if (GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH)) {
+    }
+    
+    return CCString::create(localeName);
+}
+        
 TargetPlatform CCApplication::getTargetPlatform()
 {
     return kTargetWinRT;
