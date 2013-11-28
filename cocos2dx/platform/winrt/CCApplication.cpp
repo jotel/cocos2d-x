@@ -211,7 +211,7 @@ CCString* CCApplication::getPreferredLocalization() {
     if (GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH)) {
     }
     
-    return CCString::create(localeName);
+    return CCString::create(std::string("en"));
 }
         
 TargetPlatform CCApplication::getTargetPlatform()

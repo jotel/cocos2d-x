@@ -559,15 +559,15 @@ bool CCTexture2D::initWithString(const char *text, const ccFontDefinition &textD
     
     
     #else
-        bool requestUnsupported = textDefinition._shadow._shadowEnabled || textDefinition._stroke._strokeEnabled;
+        bool requestUnsupported = textDefinition.m_shadow.m_shadowEnabled || textDefinition.m_stroke.m_strokeEnabled;
     
         CCAssert(requestUnsupported == false, "Currently shadow and stroke only supported on iOS and Android!");
     
         do
         {
-            Image* pImage = new Image();
+            CCImage* pImage = new CCImage();
             CC_BREAK_IF(NULL == pImage);
-            bRet = pImage->initWithString(text, (int)textDefinition._dimensions.width, (int)textDefinition._dimensions.height, eAlign, textDefinition._fontName.c_str(), (int)textDefinition._fontSize);
+            bRet = pImage->initWithString(text, (int)textDefinition.m_dimensions.width, (int)textDefinition.m_dimensions.height, eAlign, textDefinition.m_fontName.c_str(), (int)textDefinition.m_fontSize);
             CC_BREAK_IF(!bRet);
             bRet = initWithImage(pImage);
             CC_SAFE_RELEASE(pImage);

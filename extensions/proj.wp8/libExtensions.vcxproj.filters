@@ -120,9 +120,6 @@
     <ClCompile Include="..\CCBReader\CCControlLoader.cpp">
       <Filter>CCBReader</Filter>
     </ClCompile>
-    <ClCompile Include="..\CCBReader\CCData.cpp">
-      <Filter>CCBReader</Filter>
-    </ClCompile>
     <ClCompile Include="..\CCBReader\CCLabelBMFontLoader.cpp">
       <Filter>CCBReader</Filter>
     </ClCompile>
@@ -499,9 +496,6 @@
       <Filter>CCBReader</Filter>
     </ClInclude>
     <ClInclude Include="..\CCBReader\CCControlLoader.h">
-      <Filter>CCBReader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\CCBReader\CCData.h">
       <Filter>CCBReader</Filter>
     </ClInclude>
     <ClInclude Include="..\CCBReader\CCLabelBMFontLoader.h">

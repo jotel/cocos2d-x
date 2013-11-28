@@ -507,6 +507,9 @@
     <ClCompile Include="..\platform\winrt\CCPThreadWinRT.cpp">
       <Filter>platform\winrt</Filter>
     </ClCompile>
+    <ClCompile Include="..\cocoa\CCData.cpp">
+      <Filter>cocoa</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\actions\CCAction.h">
@@ -975,6 +978,9 @@
     </ClInclude>
     <ClInclude Include="..\platform\winrt\CCPThreadWinRT.h">
       <Filter>platform\winrt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocoa\CCData.h">
+      <Filter>cocoa</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
