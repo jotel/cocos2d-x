@@ -187,6 +187,9 @@ typedef struct
     bool         hasShadow;
     CGSize       shadowOffset;
     float        shadowBlur;
+    float        shadowColorR;
+    float        shadowColorG;
+    float        shadowColorB;
     float        shadowOpacity;
     bool         hasStroke;
     float        strokeColorR;
@@ -254,11 +257,8 @@ static bool _initWithString(const char * text, cocos2d::Device::TextAlign align,
         
         NSString * str          = [NSString stringWithUTF8String:text];
         NSString * fntName      = [NSString stringWithUTF8String:fontName];
-        
-        CGSize dim, constrainSize;
-        
-        constrainSize.width     = info->width;
-        constrainSize.height    = info->height;
+
+        CGSize dim, constrainSize = CGSizeMake(info->width, info->height);
         
         // On iOS custom fonts must be listed beforehand in the App info.plist (in order to be usable) and referenced only the by the font family name itself when
         // calling [UIFont fontWithName]. Therefore even if the developer adds 'SomeFont.ttf' or 'fonts/SomeFont.ttf' to the App .plist, the font must
@@ -289,51 +289,48 @@ static bool _initWithString(const char * text, cocos2d::Device::TextAlign align,
         
         CC_BREAK_IF(! font);
         
-        // compute start point
-        int startH = 0;
-        if (constrainSize.height > dim.height)
-        {
-            // vertical alignment
-            unsigned int vAlignment = ((int)align >> 4) & 0x0F;
-            if (vAlignment == ALIGN_TOP)
-            {
-                startH = 0;
-            }
-            else if (vAlignment == ALIGN_CENTER)
-            {
-                startH = (constrainSize.height - dim.height) / 2;
-            }
-            else
-            {
-                startH = constrainSize.height - dim.height;
-            }
-        }
-        
+        CGRect textRect = CGRectMake(0, 0, dim.width, dim.height);
+
         // adjust text rect
         if (constrainSize.width > 0 && constrainSize.width > dim.width)
         {
-            dim.width = constrainSize.width;
+            textRect.size.width = dim.width = constrainSize.width;
         }
-        if (constrainSize.height > 0 && constrainSize.height > dim.height)
+        if (constrainSize.height > 0)
         {
-            dim.height = constrainSize.height;
+            if (constrainSize.height > dim.height) {
+                // vertical alignment
+                unsigned int vAlignment = ((int)align >> 4) & 0x0F;
+                if (vAlignment == ALIGN_BOTTOM)
+                {
+                    textRect.origin.y += constrainSize.height-dim.height;
+                }
+                else if (vAlignment == ALIGN_CENTER)
+                {
+                    textRect.origin.y += (constrainSize.height-dim.height) / 2.0f;
+                } else {
+                    textRect.size.height = constrainSize.height;
+                }
+                dim.height = constrainSize.height;
+            } else {
+                textRect.size.height = dim.height = constrainSize.height;
+            }
         }
         
+        CGRect shadowAndStrokeRect = CGRectMake(0, 0, dim.width, dim.height);
         
-        // compute the padding needed by shadow and stroke
-        float shadowStrokePaddingX = 0.0f;
-        float shadowStrokePaddingY = 0.0f;
-        
-        if ( info->hasStroke )
-        {
-            shadowStrokePaddingX = ceilf(info->strokeSize);
-            shadowStrokePaddingY = ceilf(info->strokeSize);
+        if ( info->hasStroke ) {
+            shadowAndStrokeRect = CGRectInset(textRect, -info->strokeSize/2.0f, -info->strokeSize/2.0f);
         }
         
-        // add the padding (this could be 0 if no shadow and no stroke)
-        dim.width  += shadowStrokePaddingX*2;
-        dim.height += shadowStrokePaddingY*2;
+        if ( info->hasShadow ) {
+            shadowAndStrokeRect = CGRectUnion(shadowAndStrokeRect,
+                                              CGRectOffset(CGRectInset(CGRectMake(0, 0, dim.width, dim.height), -info->shadowBlur, -info->shadowBlur),
+                                                           info->shadowOffset.width, -info->shadowOffset.height));
+        }
         
+        textRect = CGRectOffset(textRect, -shadowAndStrokeRect.origin.x, -shadowAndStrokeRect.origin.y);
+        dim = shadowAndStrokeRect.size;
         
         unsigned char* data = (unsigned char*)malloc(sizeof(unsigned char) * (int)(dim.width * dim.height * 4));
         memset(data, 0, (int)(dim.width * dim.height * 4));
@@ -357,7 +354,7 @@ static bool _initWithString(const char * text, cocos2d::Device::TextAlign align,
         // text color
         CGContextSetRGBFillColor(context, info->tintColorR, info->tintColorG, info->tintColorB, 1);
         // move Y rendering to the top of the image
-        CGContextTranslateCTM(context, 0.0f, (dim.height - shadowStrokePaddingY) );
+        CGContextTranslateCTM(context, 0.0f, dim.height);
         CGContextScaleCTM(context, 1.0f, -1.0f); //NOTE: NSString draws in UIKit referential i.e. renders upside-down compared to CGBitmapContext referential
         
         // store the current context
@@ -368,37 +365,34 @@ static bool _initWithString(const char * text, cocos2d::Device::TextAlign align,
         NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight
                                                   : (3 == uHoriFlag) ? NSTextAlignmentCenter
                                                   : NSTextAlignmentLeft;
-         
+        
+        // take care of shadow if needed
+        if ( info->hasShadow )
+        {
+            CGFloat shadowColorValues[] = {info->shadowColorR, info->shadowColorG, info->shadowColorB, info->shadowOpacity};
+            CGColorRef shadowColor = CGColorCreate (colorSpace, shadowColorValues);
+            
+            CGContextSetShadowWithColor(context, info->shadowOffset, info->shadowBlur, shadowColor);
+            
+            CGColorRelease (shadowColor);
+        }
         
         CGColorSpaceRelease(colorSpace);
         
-        // compute the rect used for rendering the text
-        // based on wether shadows or stroke are enabled
-        
-        float textOriginX  = 0;
-        float textOrigingY = startH;
-        
-        float textWidth    = dim.width;
-        float textHeight   = dim.height;
-        
-        CGRect rect = CGRectMake(textOriginX, textOrigingY, textWidth, textHeight);
-        
         CGContextSetShouldSubpixelQuantizeFonts(context, false);
-        
-        CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
+                
+        CGContextBeginTransparencyLayer(context, NULL);
         
         if ( info->hasStroke )
         {
-            CGContextSetTextDrawingMode(context, kCGTextStroke);
-            
             if(s_isIOS7OrHigher)
             {
                 NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
                 paragraphStyle.alignment = nsAlign;
                 paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-                [str drawInRect:rect withAttributes:@{
+                [str drawInRect: textRect withAttributes:@{
                                                       NSFontAttributeName: font,
-                                                      NSStrokeWidthAttributeName: [NSNumber numberWithFloat: info->strokeSize / size * 100 ],
+                                                      NSStrokeWidthAttributeName: [NSNumber numberWithFloat: -info->strokeSize / size * 100 ],
                                                       NSForegroundColorAttributeName:[UIColor colorWithRed:info->tintColorR
                                                                                                      green:info->tintColorG
                                                                                                       blue:info->tintColorB
@@ -415,18 +409,21 @@ static bool _initWithString(const char * text, cocos2d::Device::TextAlign align,
             }
             else
             {
+                CGContextSetTextDrawingMode(context, kCGTextFillStroke);
                 CGContextSetRGBStrokeColor(context, info->strokeColorR, info->strokeColorG, info->strokeColorB, 1);
                 CGContextSetLineWidth(context, info->strokeSize);
                 
                 //original code that was not working in iOS 7
-                [str drawInRect: rect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:nsAlign];
+                [str drawInRect: textRect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:nsAlign];
             }
         }
+        else
+        {
+            CGContextSetTextDrawingMode(context, kCGTextFill);
         
-        CGContextSetTextDrawingMode(context, kCGTextFill);
-        
-        // actually draw the text in the context
-        [str drawInRect: rect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:nsAlign];
+            // actually draw the text in the context
+            [str drawInRect: textRect withFont:font lineBreakMode:NSLineBreakByWordWrapping alignment:nsAlign];
+        }
         
         CGContextEndTransparencyLayer(context);
         
@@ -460,6 +457,9 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
         info.hasShadow              = textDefinition._shadow._shadowEnabled;
         info.shadowOffset.width     = textDefinition._shadow._shadowOffset.width;
         info.shadowOffset.height    = textDefinition._shadow._shadowOffset.height;
+        info.shadowColorR           = textDefinition._shadow._shadowColor.r / 255.0f;
+        info.shadowColorG           = textDefinition._shadow._shadowColor.g / 255.0f;
+        info.shadowColorB           = textDefinition._shadow._shadowColor.b / 255.0f;
         info.shadowBlur             = textDefinition._shadow._shadowBlur;
         info.shadowOpacity          = textDefinition._shadow._shadowOpacity;
         info.hasStroke              = textDefinition._stroke._strokeEnabled;

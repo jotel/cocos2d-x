@@ -418,6 +418,7 @@ public:
         : _shadowEnabled(false)
         , _shadowBlur(0)
         , _shadowOpacity(0)
+        , _shadowColor(Color3B::BLACK)
     {}
 
     // true if shadow enabled
@@ -428,6 +429,8 @@ public:
 	float  _shadowBlur;
     // shadow opacity
 	float  _shadowOpacity;
+    //shadow color
+	Color3B  _shadowColor;
 };
 
 // stroke attributes
