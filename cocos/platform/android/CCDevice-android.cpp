@@ -93,6 +93,9 @@ public:
     									float shadowDeltaX 		= 0.0,
     									float shadowDeltaY 		= 0.0,
     									float shadowBlur 		= 0.0,
+                                        float shadowColorR 		= 0.0,
+                                        float shadowColorG 		= 0.0,
+                                        float shadowColorB 		= 0.0,
     									float shadowOpacity 	= 0.0,
     									bool stroke 			= false,
     									float strokeColorR 		= 0.0,
@@ -102,7 +105,7 @@ public:
     {
            JniMethodInfo methodInfo;
            if (! JniHelper::getStaticMethodInfo(methodInfo, "org/cocos2dx/lib/Cocos2dxBitmap", "createTextBitmapShadowStroke",
-               "(Ljava/lang/String;Ljava/lang/String;IFFFIIIZFFFFZFFFF)Z"))
+               "(Ljava/lang/String;Ljava/lang/String;IFFFIIIZFFFFFFFZFFFF)Z"))
            {
                CCLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
                return false;
@@ -132,6 +135,9 @@ public:
            {
                shadowDeltaX = 0.0f;
                shadowDeltaY = 0.0f;
+               shadowColorR = 0.0,
+               shadowColorG = 0.0,
+               shadowColorB = 0.0,
                shadowBlur = 0.0f;
                shadowOpacity = 0.0f;
            }
@@ -143,7 +149,7 @@ public:
                strokeSize = 0.0f;
            }
            if(!methodInfo.env->CallStaticBooleanMethod(methodInfo.classID, methodInfo.methodID, jstrText,
-               jstrFont, (int)fontSize, textTintR, textTintG, textTintB, eAlignMask, nWidth, nHeight, shadow, shadowDeltaX, -shadowDeltaY, shadowBlur, shadowOpacity, stroke, strokeColorR, strokeColorG, strokeColorB, strokeSize))
+               jstrFont, (int)fontSize, textTintR, textTintG, textTintB, eAlignMask, nWidth, nHeight, shadow, shadowDeltaX, -shadowDeltaY, shadowColorR, shadowColorG, shadowColorB, shadowBlur, shadowOpacity, stroke, strokeColorR, strokeColorG, strokeColorB, strokeSize))
            {
                 return false;
            }
@@ -185,7 +191,10 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
             textDefinition._shadow._shadowEnabled,
             textDefinition._shadow._shadowOffset.width, 
             textDefinition._shadow._shadowOffset.height, 
-            textDefinition._shadow._shadowBlur, 
+            textDefinition._shadow._shadowBlur,
+            textDefinition._shadow._shadowColor.r / 255.0f,
+            textDefinition._shadow._shadowColor.g / 255.0f,
+            textDefinition._shadow._shadowColor.b / 255.0f,
             textDefinition._shadow._shadowOpacity,
             textDefinition._stroke._strokeEnabled, 
             textDefinition._stroke._strokeColor.r / 255.0f, 

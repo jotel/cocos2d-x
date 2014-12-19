@@ -36,6 +36,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -96,7 +97,7 @@ public class Cocos2dxBitmap {
         //
         createTextBitmapShadowStroke( string, fontName, fontSize, 1.0f, 1.0f, 1.0f,     // text font and color
                                       alignment, width, height,                         // alignment and size
-                                      false, 0.0f, 0.0f, 0.0f, 0.0f,                        // no shadow
+                                      false, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // no shadow
                                       false, 1.0f, 1.0f, 1.0f, 1.0f);                       // no stroke
                                      
     }
@@ -104,7 +105,8 @@ public class Cocos2dxBitmap {
     public static boolean createTextBitmapShadowStroke(String string,  final String fontName, final int fontSize,
                                                     final float fontTintR, final float fontTintG, final float fontTintB,
                                                     final int alignment, final int width, final int height, final boolean shadow,
-                                                    final float shadowDX, final float shadowDY, final float shadowBlur, final float shadowOpacity, final boolean stroke,
+                                                    final float shadowDX, final float shadowDY, final float shadowR, final float shadowG, final float shadowB,  
+                                                    final float shadowBlur, final float shadowOpacity, final boolean stroke,
                                                     final float strokeR, final float strokeG, final float strokeB, final float strokeSize) {
 
         
@@ -125,19 +127,36 @@ public class Cocos2dxBitmap {
                 return false;
             }
         }
-
         
         // set the paint color
-        paint.setARGB(255, (int)(255.0 * fontTintR), (int)(255.0 * fontTintG), (int)(255.0 * fontTintB));
+        paint.setARGB(255, (int)(255 * fontTintR), (int)(255 * fontTintG), (int)(255 * fontTintB));
 
         final TextProperty textProperty = Cocos2dxBitmap.computeTextProperty(string, width, height, paint);
-        final int bitmapTotalHeight = (height == 0 ? textProperty.mTotalHeight: height);
         
-        // padding needed when using shadows (not used otherwise)
-        float bitmapPaddingX   = 0.0f;
-        float bitmapPaddingY   = 0.0f;
-        float renderTextDeltaX = 0.0f;
-        float renderTextDeltaY = 0.0f;
+        RectF textRect = new RectF(0, 0, textProperty.mMaxWidth, (height == 0 ? textProperty.mTotalHeight: height));
+
+        RectF shadowAndStrokeRect = new RectF(textRect);
+
+        if (stroke) {
+            shadowAndStrokeRect.inset(-strokeSize/2.0f, -strokeSize/2.0f);
+        }
+        
+        if (shadow ) {
+            RectF shadowRect = new RectF(textRect);
+            shadowRect.inset(-shadowBlur, -shadowBlur);
+            shadowRect.offset(shadowDX, shadowDY);
+            shadowAndStrokeRect.union(shadowRect);
+        }
+
+        textRect.offset(-shadowAndStrokeRect.left, -shadowAndStrokeRect.top);        
+
+		if ( shadow ) {
+			int shadowColor = ((int)(255 * shadowOpacity) & 0xff) << 24 | ((int)(255 * shadowR) & 0xff) << 16 |
+					((int)(255 * shadowG) & 0xff) << 8 | ((int)(255 * shadowB) & 0xff);
+			paint.setShadowLayer(shadowBlur, shadowDX, shadowDY, shadowColor);	
+		}
+        
+        final int bitmapTotalHeight = (height == 0 ? textProperty.mTotalHeight: height);
         
         if (0 == textProperty.mMaxWidth || 0 == bitmapTotalHeight)
         {
@@ -145,9 +164,8 @@ public class Cocos2dxBitmap {
             return false;
         }
 
-        
-        final Bitmap bitmap = Bitmap.createBitmap(textProperty.mMaxWidth + (int)bitmapPaddingX,
-                bitmapTotalHeight + (int)bitmapPaddingY, Bitmap.Config.ARGB_8888);
+		final Bitmap bitmap = Bitmap.createBitmap((int)Math.ceil(shadowAndStrokeRect.width()), 
+				(int)Math.ceil(shadowAndStrokeRect.height()), Bitmap.Config.ARGB_8888);        
         
         final Canvas canvas = new Canvas(bitmap);
 
@@ -169,10 +187,9 @@ public class Cocos2dxBitmap {
             for (final String line : lines2) {
                 
                 x = Cocos2dxBitmap.computeX(line, textProperty.mMaxWidth, horizontalAlignment);
-                canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paintStroke);
-                canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
-                y += textProperty.mHeightPerLine;
-                
+                canvas.drawText(line, textRect.left + x, textRect.top + y, paint);                
+                canvas.drawText(line, textRect.left + x, textRect.top + y, paintStroke);
+                y += textProperty.mHeightPerLine;                
             }
             
         }
@@ -186,7 +203,7 @@ public class Cocos2dxBitmap {
             for (final String line : lines) {
                 
                 x = Cocos2dxBitmap.computeX(line, textProperty.mMaxWidth, horizontalAlignment);
-                canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
+                canvas.drawText(line, textRect.left + x, textRect.top + y, paint);
                 y += textProperty.mHeightPerLine;
                 
             }
