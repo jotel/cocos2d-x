@@ -76,7 +76,7 @@
 -- Returns whether or not a SpriteFrame is being displayed
 -- @function [parent=#Sprite] isFrameDisplayed 
 -- @param self
--- @param #cc.SpriteFrame pFrame
+-- @param #cc.SpriteFrame frame
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
@@ -99,6 +99,13 @@
 -- @param #cc.SpriteBatchNode spriteBatchNode
         
 --------------------------------
+-- js  NA<br>
+-- lua NA
+-- @function [parent=#Sprite] getBlendFunc 
+-- @param self
+-- @return BlendFunc#BlendFunc ret (return value: cc.BlendFunc)
+        
+--------------------------------
 -- / @{/ @name Animation methods<br>
 -- Changes the display frame with animation name and index.<br>
 -- The animation name will be get from the AnimationCache
@@ -111,7 +118,7 @@
 -- Sets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode
 -- @function [parent=#Sprite] setTextureAtlas 
 -- @param self
--- @param #cc.TextureAtlas pobTextureAtlas
+-- @param #cc.TextureAtlas textureAtlas
         
 --------------------------------
 -- Returns the current displayed frame.
@@ -150,6 +157,17 @@
 -- @function [parent=#Sprite] getTextureRect 
 -- @param self
 -- @return rect_table#rect_table ret (return value: rect_table)
+        
+--------------------------------
+-- / @{/ @name Functions inherited from TextureProtocol<br>
+-- code<br>
+-- When this function bound into js or lua,the parameter will be changed<br>
+-- In js: var setBlendFunc(var src, var dst)<br>
+-- In lua: local setBlendFunc(local src, local dst)<br>
+-- endcode
+-- @function [parent=#Sprite] setBlendFunc 
+-- @param self
+-- @param #cc.BlendFunc blendFunc
         
 --------------------------------
 -- Gets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode

@@ -50,6 +50,7 @@ const char* GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP = "ShaderPositi
 const char* GLProgram::SHADER_NAME_POSITION_TEXTURE_ALPHA_TEST = "ShaderPositionTextureColorAlphaTest";
 const char* GLProgram::SHADER_NAME_POSITION_TEXTURE_ALPHA_TEST_NO_MV = "ShaderPositionTextureColorAlphaTest_NoMV";
 const char* GLProgram::SHADER_NAME_POSITION_COLOR = "ShaderPositionColor";
+const char* GLProgram::SHADER_NAME_POSITION_COLOR_POINTSIZE = "ShaderPositionColorPointsize";
 const char* GLProgram::SHADER_NAME_POSITION_COLOR_NO_MVP = "ShaderPositionColor_noMVP";
 const char* GLProgram::SHADER_NAME_POSITION_TEXTURE = "ShaderPositionTexture";
 const char* GLProgram::SHADER_NAME_POSITION_TEXTURE_U_COLOR = "ShaderPositionTexture_uColor";
@@ -89,6 +90,7 @@ const char* GLProgram::UNIFORM_NAME_ALPHA_TEST_VALUE = "CC_alpha_value";
 // Attribute names
 const char* GLProgram::ATTRIBUTE_NAME_COLOR = "a_color";
 const char* GLProgram::ATTRIBUTE_NAME_POSITION = "a_position";
+const char* GLProgram::ATTRIBUTE_NAME_POINTSIZE = "a_pointSize";
 const char* GLProgram::ATTRIBUTE_NAME_TEX_COORD = "a_texCoord";
 const char* GLProgram::ATTRIBUTE_NAME_TEX_COORD1 = "a_texCoord1";
 const char* GLProgram::ATTRIBUTE_NAME_TEX_COORD2 = "a_texCoord2";
@@ -276,6 +278,7 @@ void GLProgram::bindPredefinedVertexAttribs()
     } attribute_locations[] =
     {
         {GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION},
+        {GLProgram::ATTRIBUTE_NAME_POINTSIZE, GLProgram::VERTEX_ATTRIB_POINTSIZE},
         {GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR},
         {GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORD},
         {GLProgram::ATTRIBUTE_NAME_TEX_COORD1, GLProgram::VERTEX_ATTRIB_TEX_COORD1},
@@ -595,18 +598,36 @@ void GLProgram::use()
     GL::useProgram(_program);
 }
 
-std::string GLProgram::logForOpenGLObject(GLuint object, GLInfoFunction infoFunc, GLLogFunction logFunc) const
+static std::string logForOpenGLShader(GLuint shader)
 {
     std::string ret;
     GLint logLength = 0, charsWritten = 0;
 
-    infoFunc(object, GL_INFO_LOG_LENGTH, &logLength);
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength < 1)
         return "";
 
-    char *logBytes = (char*)malloc(logLength);
-    logFunc(object, logLength, &charsWritten, logBytes);
+    char *logBytes = (char*)malloc(logLength + 1);
+    glGetShaderInfoLog(shader, logLength, &charsWritten, logBytes);
+    logBytes[logLength] = '\0';
+    ret = logBytes;
 
+    free(logBytes);
+    return ret;
+}
+
+static std::string logForOpenGLProgram(GLuint program)
+{
+    std::string ret;
+    GLint logLength = 0, charsWritten = 0;
+
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength < 1)
+        return "";
+
+    char *logBytes = (char*)malloc(logLength + 1);
+    glGetProgramInfoLog(program, logLength, &charsWritten, logBytes);
+    logBytes[logLength] = '\0';
     ret = logBytes;
 
     free(logBytes);
@@ -615,17 +636,17 @@ std::string GLProgram::logForOpenGLObject(GLuint object, GLInfoFunction infoFunc
 
 std::string GLProgram::getVertexShaderLog() const
 {
-    return this->logForOpenGLObject(_vertShader, (GLInfoFunction)&glGetShaderiv, (GLLogFunction)&glGetShaderInfoLog);
+    return cocos2d::logForOpenGLShader(_vertShader);
 }
 
 std::string GLProgram::getFragmentShaderLog() const
 {
-    return this->logForOpenGLObject(_fragShader, (GLInfoFunction)&glGetShaderiv, (GLLogFunction)&glGetShaderInfoLog);
+    return cocos2d::logForOpenGLShader(_fragShader);
 }
 
 std::string GLProgram::getProgramLog() const
 {
-    return this->logForOpenGLObject(_program, (GLInfoFunction)&glGetProgramiv, (GLLogFunction)&glGetProgramInfoLog);
+    return logForOpenGLProgram(_program);
 }
 
 // Uniform cache

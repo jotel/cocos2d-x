@@ -77,6 +77,8 @@ cocos2d.cpp \
 2d/CCTransitionPageTurn.cpp \
 2d/CCTransitionProgress.cpp \
 2d/CCTweenFunction.cpp \
+3d/CCFrustum.cpp \
+3d/CCPlane.cpp \
 platform/CCGLView.cpp \
 platform/CCFileUtils.cpp \
 platform/CCSAXParser.cpp \
@@ -92,6 +94,7 @@ math/TransformUtils.cpp \
 math/Vec2.cpp \
 math/Vec3.cpp \
 math/Vec4.cpp \
+base/CCAsyncTaskPool.cpp \
 base/CCAutoreleasePool.cpp \
 base/CCConfiguration.cpp \
 base/CCConsole.cpp \
@@ -140,6 +143,9 @@ base/pvr.cpp \
 base/s3tc.cpp \
 base/CCController.cpp \
 base/CCController-android.cpp \
+base/allocator/CCAllocatorDiagnostics.cpp \
+base/allocator/CCAllocatorGlobal.cpp \
+base/allocator/CCAllocatorGlobalNewDelete.cpp \
 base/ObjectFactory.cpp \
 renderer/CCBatchCommand.cpp \
 renderer/CCCustomCommand.cpp \
@@ -173,11 +179,6 @@ physics/CCPhysicsContact.cpp \
 physics/CCPhysicsJoint.cpp \
 physics/CCPhysicsShape.cpp \
 physics/CCPhysicsWorld.cpp \
-physics/chipmunk/CCPhysicsBodyInfo_chipmunk.cpp \
-physics/chipmunk/CCPhysicsContactInfo_chipmunk.cpp \
-physics/chipmunk/CCPhysicsJointInfo_chipmunk.cpp \
-physics/chipmunk/CCPhysicsShapeInfo_chipmunk.cpp \
-physics/chipmunk/CCPhysicsWorldInfo_chipmunk.cpp \
 ../external/ConvertUTF/ConvertUTFWrapper.cpp \
 ../external/ConvertUTF/ConvertUTF.c \
 ../external/tinyxml2/tinyxml2.cpp \

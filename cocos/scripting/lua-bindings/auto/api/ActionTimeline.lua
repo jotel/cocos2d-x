@@ -46,6 +46,11 @@
 -- @param #ccs.Timeline timeline
         
 --------------------------------
+-- 
+-- @function [parent=#ActionTimeline] clearFrameEventCallFunc 
+-- @param self
+        
+--------------------------------
 --  Last frame callback will call when arriving last frame 
 -- @function [parent=#ActionTimeline] setLastFrameCallFunc 
 -- @param self
@@ -58,15 +63,41 @@
 -- @return array_table#array_table ret (return value: array_table)
         
 --------------------------------
+-- 
+-- @function [parent=#ActionTimeline] play 
+-- @param self
+-- @param #string animationName
+-- @param #bool loop
+        
+--------------------------------
+-- 
+-- @function [parent=#ActionTimeline] getAnimationInfo 
+-- @param self
+-- @param #string animationName
+-- @return AnimationInfo#AnimationInfo ret (return value: ccs.AnimationInfo)
+        
+--------------------------------
 --  Resume the animation. 
 -- @function [parent=#ActionTimeline] resume 
 -- @param self
+        
+--------------------------------
+-- 
+-- @function [parent=#ActionTimeline] removeAnimationInfo 
+-- @param self
+-- @param #string animationName
         
 --------------------------------
 --  Get current animation speed. 
 -- @function [parent=#ActionTimeline] getTimeSpeed 
 -- @param self
 -- @return float#float ret (return value: float)
+        
+--------------------------------
+--  AnimationInfo
+-- @function [parent=#ActionTimeline] addAnimationInfo 
+-- @param self
+-- @param #ccs.AnimationInfo animationInfo
         
 --------------------------------
 -- 
@@ -101,8 +132,10 @@
 
 --------------------------------
 -- 
--- @function [parent=#ActionTimeline] clearFrameEventCallFunc 
+-- @function [parent=#ActionTimeline] IsAnimationInfoExists 
 -- @param self
+-- @param #string animationName
+-- @return bool#bool ret (return value: bool)
         
 --------------------------------
 --  End frame of this action.<br>

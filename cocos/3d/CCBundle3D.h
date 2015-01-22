@@ -42,12 +42,10 @@ class Data;
 class CC_DLL Bundle3D
 {
 public:
-    /**you can define yourself bundle and set it, use default bundle otherwise*/
-    static void setBundleInstance(Bundle3D* bundleInstance);
+    // create a new bundle, destroy it when finish using it
+    static Bundle3D* createBundle();
     
-    static Bundle3D* getInstance();
-    
-    static void destroyInstance();
+    static void destroyBundle(Bundle3D* bundle);
     
 	virtual void clear();
 
@@ -79,6 +77,9 @@ public:
     
     //load .obj file
     static bool loadObj(MeshDatas& meshdatas, MaterialDatas& materialdatas, NodeDatas& nodedatas, const std::string& fullPath, const char* mtl_basepath = nullptr);
+    
+    //calculate aabb
+    static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
   
 protected:
 
@@ -154,10 +155,7 @@ CC_CONSTRUCTOR_ACCESS:
     Bundle3D();
     virtual ~Bundle3D();
     
-    static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
-    
 protected:
-    static Bundle3D* _instance;
     std::string _modelPath;
     std::string _path;
     std::string _version;// the c3b or c3t version

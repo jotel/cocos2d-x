@@ -29,6 +29,12 @@
 -- @param self
         
 --------------------------------
+-- 
+-- @function [parent=#Sprite3D] setBlendFunc 
+-- @param self
+-- @param #cc.BlendFunc blendFunc
+        
+--------------------------------
 -- get mesh
 -- @function [parent=#Sprite3D] getMesh 
 -- @param self
@@ -92,13 +98,24 @@
 -- @return AttachNode#AttachNode ret (return value: cc.AttachNode)
         
 --------------------------------
--- @overload self, string, string         
 -- @overload self, string         
+-- @overload self         
+-- @overload self, string, string         
 -- @function [parent=#Sprite3D] create
 -- @param self
 -- @param #string modelPath
 -- @param #string texturePath
 -- @return Sprite3D#Sprite3D ret (return value: cc.Sprite3D)
+
+--------------------------------
+-- @overload self, string, string, function, void         
+-- @overload self, string, function, void         
+-- @function [parent=#Sprite3D] createAsync
+-- @param self
+-- @param #string modelPath
+-- @param #string texturePath
+-- @param #function callback
+-- @param #void callbackparam
 
 --------------------------------
 -- Returns 2d bounding-box<br>
